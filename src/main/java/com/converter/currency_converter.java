@@ -1,7 +1,6 @@
 package com.converter;
 
 import com.opencsv.*;
-
 import org.apache.commons.cli.*;
 
 import java.io.*;
@@ -28,15 +27,7 @@ public class currency_converter {
 
             // Read the first line with a Header
             nextLine = csvReader.readNext();
-
-            if ( OUTPUT.equals("stdout") ){
-                for (String cell : nextLine) {
-                    System.out.print("|" + cell + "|\t");
-                }
-                System.out.println();
-            } else {
-                writeData(OUTPUT, nextLine);
-            }
+            writeData(OUTPUT, nextLine);
 
             while ((nextLine = csvReader.readNext()) != null) {
                 DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.FRANCE);
@@ -46,18 +37,12 @@ public class currency_converter {
                 DecimalFormat df = new DecimalFormat("#,##0.00", decimalFormatSymbols);
 
                 PRICE = Double.parseDouble(nextLine[FIELD]) * MULTIPLIER;
-                nextLine[FIELD] = String.valueOf(df.format(PRICE));
-
-
-                if ( OUTPUT.equals("stdout") ){
-                    for (String cell : nextLine) {
-                        System.out.print("|" + cell + "|\t");
-                    }
-                    System.out.println();
+                if ( OUTPUT.equals("stdout") ) {
+                    nextLine[FIELD] = String.valueOf('"' + df.format(PRICE) + '"');
                 } else {
-                    appendData(OUTPUT, nextLine);
+                    nextLine[FIELD] = String.valueOf(df.format(PRICE));
                 }
-
+                appendData(OUTPUT, nextLine);
             }
         }
         catch (Exception e) {
@@ -67,10 +52,14 @@ public class currency_converter {
 
     public static void writeData(String OUTPUT, String[] data){
         try {
-            FileWriter fileWriter = new FileWriter(OUTPUT);
-            CSVWriter csvWriter = new CSVWriter(fileWriter);
-            csvWriter.writeNext(data, false);
-            csvWriter.close();
+            if ( OUTPUT.equals("stdout") ){
+                System.out.println(String.join(",", data));
+            } else {
+                FileWriter fileWriter = new FileWriter(OUTPUT);
+                CSVWriter csvWriter = new CSVWriter(fileWriter);
+                csvWriter.writeNext(data, false);
+                csvWriter.close();
+            }
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -78,10 +67,14 @@ public class currency_converter {
     }
     public static void appendData(String OUTPUT, String[] data){
         try {
-            FileWriter fileWriter = new FileWriter(OUTPUT, true);
-            CSVWriter csvWriter = new CSVWriter(fileWriter);
-            csvWriter.writeNext(data, false);
-            csvWriter.close();
+            if ( OUTPUT.equals("stdout") ){
+                System.out.println(String.join(",", data));
+            } else {
+                FileWriter fileWriter = new FileWriter(OUTPUT, true);
+                CSVWriter csvWriter = new CSVWriter(fileWriter);
+                csvWriter.writeNext(data, false);
+                csvWriter.close();
+            }
         }
         catch (IOException e) {
             e.printStackTrace();
