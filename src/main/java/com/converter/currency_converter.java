@@ -30,7 +30,9 @@ public class currency_converter {
             writeData(OUTPUT, nextLine);
 
             while ((nextLine = csvReader.readNext()) != null) {
+                //DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.US);
                 DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.FRANCE);
+
                 //DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
                 //decimalFormatSymbols.setDecimalSeparator('.');
 
