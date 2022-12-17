@@ -38,7 +38,9 @@ public class currency_converter {
 
                 DecimalFormat df = new DecimalFormat("#,##0.00", decimalFormatSymbols);
 
+                // Remove quotes if exist
                 nextLine[FIELD] = nextLine[FIELD].replace("\"","");
+                // Replace "," -> "." if exists
                 nextLine[FIELD] = nextLine[FIELD].replace(",",".");
                 PRICE = Double.parseDouble(nextLine[FIELD].replace("\"","")) * MULTIPLIER;
                 if ( OUTPUT.equals("stdout") ) {
@@ -105,6 +107,10 @@ public class currency_converter {
         output.setRequired(false);
         options.addOption(output);
 
+        //Option locale = new Option("l", "locale", true, "Set locale for DecimalFormatSymbols (US by default)");
+        //locale.setRequired(false);
+        //options.addOption(locale);
+
         HelpFormatter formatter = new HelpFormatter();
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
@@ -114,6 +120,7 @@ public class currency_converter {
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             formatter.printHelp("currency_converter <--field N> [--multiplier N] [-i input] <-o output>", options);
+            //formatter.printHelp("currency_converter <--field N> [--multiplier N] [-i input] <-o output> <-l locale>", options);
             System.exit(1);
         }
 
@@ -127,6 +134,11 @@ public class currency_converter {
         } else {
             arguments.put("output", "stdout");
         }
+        //if ( cmd.hasOption("locale") ) {
+        //    arguments.put("locale", Locale.forLanguageTag(cmd.getOptionValue("locale")));
+        //} else {
+        //    arguments.put("locale", Locale.US);
+        //}
 
         arguments.put("multiplier", Double.parseDouble(cmd.getOptionValue("multiplier")));
         arguments.put("input", cmd.getOptionValue("input"));
