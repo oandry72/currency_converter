@@ -36,7 +36,9 @@ public class currency_converter {
 
                 DecimalFormat df = new DecimalFormat("#,##0.00", decimalFormatSymbols);
 
-                PRICE = Double.parseDouble(nextLine[FIELD]) * MULTIPLIER;
+                nextLine[FIELD] = nextLine[FIELD].replace("\"","");
+                nextLine[FIELD] = nextLine[FIELD].replace(",",".");
+                PRICE = Double.parseDouble(nextLine[FIELD].replace("\"","")) * MULTIPLIER;
                 if ( OUTPUT.equals("stdout") ) {
                     nextLine[FIELD] = String.valueOf('"' + df.format(PRICE) + '"');
                 } else {
